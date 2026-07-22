@@ -69,6 +69,18 @@ body {
   white-space: pre-line;
 }
 
+.start-desc-line {
+  margin: 0 0 10px;
+}
+
+.start-desc-line:empty {
+  margin: 0 0 4px;
+}
+
+.start-desc-line strong {
+  color: var(--gold-soft);
+}
+
 .start-desc-small {
   font-size: 14px;
 }
@@ -96,6 +108,19 @@ body {
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(143, 37, 54, 0.4);
+}
+
+.btn-glow {
+  animation: btn-glow-pulse 2.2s ease-in-out infinite;
+}
+
+.btn-glow:hover {
+  animation-play-state: paused;
+}
+
+@keyframes btn-glow-pulse {
+  0%, 100% { box-shadow: 0 0 6px 0 rgba(199, 162, 74, 0.35); }
+  50% { box-shadow: 0 0 22px 4px rgba(199, 162, 74, 0.75); }
 }
 
 /* ---------- Game Screen & UI (صندوق الحوار والأزرار) ---------- */

@@ -49,13 +49,27 @@ function StartScreen({ onStart }) {
   );
 }
 
+function renderFormattedText(text) {
+  return text.split("\n").map((line, i) => (
+    <p key={i} className="start-desc-line">
+      {line.split(/(\*\*[^*]+\*\*)/g).map((part, j) =>
+        part.startsWith("**") && part.endsWith("**") ? (
+          <strong key={j}>{part.slice(2, -2)}</strong>
+        ) : (
+          part
+        )
+      )}
+    </p>
+  ));
+}
+
 function LevelIntroScreen({ intro, onContinue }) {
   return (
     <section className="start-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
       <p className="eyebrow">{intro.subtitleAr}</p>
       <h1>{intro.titleAr}</h1>
-      <p className="start-desc">{intro.introAr}</p>
-      <button className="btn-primary" onClick={onContinue}>
+      <div className="start-desc">{renderFormattedText(intro.introAr)}</div>
+      <button className="btn-primary btn-glow" onClick={onContinue}>
         {intro.buttonAr}
       </button>
     </section>
