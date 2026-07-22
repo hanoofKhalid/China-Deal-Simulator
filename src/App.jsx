@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   STORY,
   EVENT_ORDER,
@@ -7,7 +7,7 @@ import {
   GUANXI_WARNING_THRESHOLD,
   LEVEL_INTROS,
 } from "./Story.js";
-import { playDoorSlam, playHeartbeat } from "./sfx.js";
+import { playDoorSlam, playHeartbeat, playClockTick } from "./sfx.js";
 import "./App.css";
 
 function clamp(value) {
@@ -113,6 +113,16 @@ function LevelIntroScreen({ intro, onContinue }) {
   const pages = intro.pagesAr;
   const [step, setStep] = useState(0);
 
+  useEffect(() => {
+    if (!pages) return;
+    // الصفحة الأولى: صوت الباب مشغَّل مسبقاً عبر handleStart لحظة فتح المقدمة.
+    // الصفحة الأخيرة: تحمل ملاحظة دقات الساعة، فتُشغَّل هنا لحظة الوصول إليها.
+    if (step === pages.length - 1) {
+      playClockTick();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+
   if (!pages) {
     return (
       <section className="start-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
@@ -129,7 +139,8 @@ function LevelIntroScreen({ intro, onContinue }) {
   const isLast = step === pages.length - 1;
 
   return (
-    <section className="start-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
+    <section className="start-card intro-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
+      {step === 0 && <div className="intro-red-flash" />}
       <p className="eyebrow">{intro.subtitleAr}</p>
       <h1>{intro.titleAr}</h1>
       <div className="intro-page-dots">
@@ -140,7 +151,9 @@ function LevelIntroScreen({ intro, onContinue }) {
       <p className="intro-page-counter">
         صفحة {step + 1} من {pages.length}
       </p>
-      <div className="start-desc">{pages[step].map(renderIntroBlock)}</div>
+      <div className="start-desc intro-page-content" key={step}>
+        {pages[step].map(renderIntroBlock)}
+      </div>
       <div className="intro-nav">
         {step > 0 && (
           <button className="btn-secondary" onClick={() => setStep((s) => s - 1)}>

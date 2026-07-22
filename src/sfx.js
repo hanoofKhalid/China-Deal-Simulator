@@ -79,3 +79,29 @@ export function playHeartbeat() {
   thump(now, 62, 0.15, 0.75);
   thump(now + 0.22, 52, 0.18, 0.55);
 }
+
+// دقات ساعة جدارية بطيئة وخافتة، تُستخدم لإعلان بدء التوتر في آخر صفحة من المقدمة
+export function playClockTick() {
+  const ctx = getContext();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+
+  function tick(t) {
+    const osc = ctx.createOscillator();
+    osc.type = "square";
+    osc.frequency.setValueAtTime(1100, t);
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.12, t + 0.004);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.07);
+  }
+
+  tick(now);
+  tick(now + 0.65);
+  tick(now + 1.3);
+}
