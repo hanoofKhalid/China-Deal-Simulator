@@ -24,11 +24,28 @@ body {
 }
 
 #app {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
+}
+
+/* توهج خلفي مستمر "يتنفس" ببطء خلف كل الشاشات، لإحساس سينمائي حي بدل ومضة مسطحة لمرة واحدة */
+#ambient-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 35%, rgba(150, 10, 10, 0.55) 0%, rgba(90, 0, 0, 0.25) 40%, rgba(0, 0, 0, 0) 70%);
+  animation: ambient-breathe 7s ease-in-out infinite;
+}
+
+@keyframes ambient-breathe {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
 }
 
 .eyebrow {
@@ -205,38 +222,6 @@ body {
   margin: 10px 0 0;
 }
 
-/* Cinematic note box: sound-effect / stage-direction callouts, kept
-   visually separate from the narrative text instead of inline. */
-.intro-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  border-radius: 10px;
-  padding: 10px 14px;
-  margin: 0 0 14px;
-  font-size: 13px;
-  font-style: italic;
-  color: var(--text-dim);
-  text-align: start;
-}
-
-.intro-note-icon {
-  font-style: normal;
-  font-size: 16px;
-  line-height: 1.3;
-  flex-shrink: 0;
-}
-
-.intro-note-sound {
-  background: rgba(255, 215, 0, 0.06);
-  border: 1px dashed rgba(255, 215, 0, 0.4);
-}
-
-.intro-note-direction {
-  background: rgba(255, 69, 0, 0.08);
-  border: 1px dashed rgba(255, 69, 0, 0.45);
-}
-
 .intro-page-content {
   animation: intro-page-fade 0.6s ease both;
 }
@@ -246,17 +231,21 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ومضة إضاءة افتتاحية غنية على مرحلتين: ذروة سريعة ثم استقرار بطيء ناعم،
+   تتلاشى إلى التوهج المستمر (#ambient-glow) بدل قطع مفاجئ ومسطح. */
 .intro-red-flash {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, rgba(255, 20, 20, 0.55) 0%, rgba(255, 20, 20, 0) 70%);
-  animation: intro-red-flash 1.6s ease-out forwards;
+  background: radial-gradient(ellipse at center, rgba(255, 40, 20, 0.75) 0%, rgba(200, 0, 0, 0.25) 45%, rgba(255, 0, 0, 0) 75%);
+  animation: intro-red-flash 2.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   pointer-events: none;
 }
 
 @keyframes intro-red-flash {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+  0% { opacity: 1; transform: scale(0.92); }
+  25% { opacity: 0.85; transform: scale(1.05); }
+  60% { opacity: 0.4; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
 }
 
 @keyframes btn-glow-pulse {

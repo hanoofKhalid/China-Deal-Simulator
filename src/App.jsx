@@ -64,21 +64,8 @@ function renderFormattedText(text) {
   ));
 }
 
-function CinematicNote({ icon, text, kind }) {
-  return (
-    <div className={`intro-note intro-note-${kind}`}>
-      <span className="intro-note-icon">{icon}</span>
-      <span className="intro-note-text">{text}</span>
-    </div>
-  );
-}
-
 function renderIntroBlock(block, i) {
   switch (block.type) {
-    case "note":
-      return <CinematicNote key={i} icon={block.icon || "🔊"} text={block.text} kind="sound" />;
-    case "direction":
-      return <CinematicNote key={i} icon={block.icon || "🎬"} text={block.text} kind="direction" />;
     case "heading":
       return (
         <h3 key={i} className="intro-heading">
@@ -425,7 +412,9 @@ export default function App() {
   const isLevelIntro = state.screen === "game" && Boolean(LEVEL_INTROS[state.nodeId]);
 
   return (
-    <div id="app">
+    <>
+      <div id="ambient-glow" />
+      <div id="app">
       {state.screen === "start" && <StartScreen onStart={handleStart} />}
       {isLevelIntro && (
         <LevelIntroScreen
@@ -442,6 +431,7 @@ export default function App() {
       {state.screen === "evaluation" && (
         <EvaluationScreen state={state} onRestart={handleStart} />
       )}
-    </div>
+      </div>
+    </>
   );
 }
