@@ -188,10 +188,6 @@ function GameOverScreen({ text, onRestart }) {
 
 const VERDICT_ICONS = { success: "✔", warning: "⚠", fail: "✗" };
 
-function shortEventTitle(fullTitle) {
-  return fullTitle.replace(/^الحدث\s+\S+:\s*/, "");
-}
-
 function EvaluationScreen({ state, onRestart }) {
   const loggedKeys = EVENT_ORDER.filter((key) => state.log[key]);
 
@@ -209,19 +205,21 @@ function EvaluationScreen({ state, onRestart }) {
           <strong>{state.mianzi} / 100</strong>
         </div>
       </div>
+      <h3 className="eval-section-title">تحليل أبرز القرارات</h3>
       <ul id="evaluation-list">
         {loggedKeys.map((key) => {
           const entry = state.log[key];
-          const title = shortEventTitle(STORY[key]?.eventTitle || key);
+          const eventTitle = STORY[key]?.eventTitle || key;
           return (
             <li key={key} className={`eval-item eval-${entry.verdict}`}>
               <div className="eval-title">
                 <span style={{ color: `var(--${entry.verdict})` }}>
                   {VERDICT_ICONS[entry.verdict] || "•"}
                 </span>{" "}
-                {title}
+                {eventTitle}
               </div>
-              <div className="eval-analysis">— {entry.analysis}</div>
+              <div className="eval-choice">{entry.label}</div>
+              <div className="eval-analysis">{entry.analysis}</div>
             </li>
           );
         })}
