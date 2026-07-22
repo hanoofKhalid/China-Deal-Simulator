@@ -1,0 +1,261 @@
+:root {
+  --bg-panel: #0d1626;
+  --gold: #c7a24a;
+  --gold-soft: #e3c878;
+  --red: #6d1b2a;
+  --red-bright: #8f2536;
+  --text: #f4efe4;
+  --text-dim: #c3cad6;
+  --success: #4caf7d;
+  --warning: #c7a24a;
+  --fail: #8f2536;
+}
+
+body {
+  background-color: #060b14;
+  color: var(--text);
+  font-family: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 13px;
+  color: var(--gold-soft);
+  margin: 0 0 8px;
+}
+
+.eyebrow-danger {
+  color: var(--fail);
+}
+
+/* ---------- Start & End Cards ---------- */
+
+.start-card, .end-card {
+  background: var(--bg-panel);
+  border: 1px solid rgba(199, 162, 74, 0.35);
+  border-radius: 16px;
+  padding: 36px 28px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.start-card h1, .end-card h2 {
+  margin: 0;
+  font-size: 32px;
+  color: var(--gold);
+}
+
+.start-card h2 {
+  margin: 4px 0 20px;
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+.start-desc {
+  line-height: 1.9;
+  color: var(--text-dim);
+  margin: 0 0 16px;
+}
+
+.start-desc-small {
+  font-size: 14px;
+}
+
+.start-desc-zh {
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+  opacity: 0.85;
+}
+
+.btn-primary {
+  margin-top: 12px;
+  background: linear-gradient(135deg, var(--red-bright), var(--red));
+  color: var(--text);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(143, 37, 54, 0.4);
+}
+
+/* ---------- Game Screen & UI (صندوق الحوار والأزرار) ---------- */
+
+#status-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.meter {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 1px solid rgba(199, 162, 74, 0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.meter-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.meter-track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.35s ease;
+}
+
+.meter-fill.meter-danger {
+  background: var(--fail);
+}
+
+#warning-banner {
+  background: rgba(143, 37, 54, 0.2);
+  border: 1px solid var(--fail);
+  color: #ffb3ad;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+/* 1. صندوق الحوار: Solid (غير شفاف تماماً واحترافي) */
+.dialogue-box {
+  background: #0d1626; /* لون صلب غير شفاف */
+  border: 1px solid rgba(199, 162, 74, 0.4);
+  border-top: 3px solid var(--gold);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.dialogue-speaker {
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.dialogue-text {
+  color: var(--text);
+  line-height: 1.9;
+  font-size: 17px;
+}
+
+/* 2. أزرار الاختيارات: شفافة (Translucent / Glassmorphic) */
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.choice-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: right;
+  background: rgba(244, 239, 228, 0.08); /* خلفية شفافة ناعمة */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(199, 162, 74, 0.4);
+  border-radius: 14px;
+  color: var(--text);
+  padding: 14px 18px;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.choice-btn:hover {
+  background: rgba(199, 162, 74, 18);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- Evaluation & Score Screens ---------- */
+
+.final-scores {
+  display: flex;
+  gap: 16px;
+  margin: 18px 0;
+}
+
+.final-score {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(199, 162, 74, 0.25);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+
+.final-score span {
+  display: block;
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.final-score strong {
+  font-size: 22px;
+  color: var(--gold);
+}
+
+#evaluation-list {
+  list-style: none;
+  margin: 16px 0 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eval-item {
+  border-radius: 10px;
+  padding: 12px 14px;
+  border-inline-start: 4px solid var(--text-dim);
+  background: rgba(255, 255, 255, 0.03);
+  text-align: right;
+}
+
+.eval-success { border-inline-start-color: var(--success); }
+.eval-warning { border-inline-start-color: var(--warning); }
+.eval-fail { border-inline-start-color: var(--fail); }
+
+.eval-title { font-weight: 700; margin-bottom: 4px; }
+.eval-choice { font-size: 13px; color: var(--text-dim); margin-bottom: 6px; }
+.eval-analysis { font-size: 14px; line-height: 1.8; }
