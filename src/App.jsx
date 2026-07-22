@@ -63,15 +63,100 @@ function renderFormattedText(text) {
   ));
 }
 
+function CinematicNote({ icon, text, kind }) {
+  return (
+    <div className={`intro-note intro-note-${kind}`}>
+      <span className="intro-note-icon">{icon}</span>
+      <span className="intro-note-text">{text}</span>
+    </div>
+  );
+}
+
+function renderIntroBlock(block, i) {
+  switch (block.type) {
+    case "note":
+      return <CinematicNote key={i} icon={block.icon || "🔊"} text={block.text} kind="sound" />;
+    case "direction":
+      return <CinematicNote key={i} icon={block.icon || "🎬"} text={block.text} kind="direction" />;
+    case "heading":
+      return (
+        <h3 key={i} className="intro-heading">
+          {block.text}
+        </h3>
+      );
+    case "legend":
+      return (
+        <div key={i} className="intro-legend-row">
+          <span className="intro-legend-icon">{block.icon}</span>
+          <span>
+            <strong>{block.label}:</strong> {block.text}
+          </span>
+        </div>
+      );
+    case "quote":
+      return (
+        <p key={i} className="intro-quote">
+          {block.text}
+        </p>
+      );
+    default:
+      return (
+        <p key={i} className="start-desc-line">
+          {block.text}
+        </p>
+      );
+  }
+}
+
 function LevelIntroScreen({ intro, onContinue }) {
+  const pages = intro.pagesAr;
+  const [step, setStep] = useState(0);
+
+  if (!pages) {
+    return (
+      <section className="start-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
+        <p className="eyebrow">{intro.subtitleAr}</p>
+        <h1>{intro.titleAr}</h1>
+        <div className="start-desc">{renderFormattedText(intro.introAr)}</div>
+        <button className="btn-primary btn-glow" onClick={onContinue}>
+          {intro.buttonAr}
+        </button>
+      </section>
+    );
+  }
+
+  const isLast = step === pages.length - 1;
+
   return (
     <section className="start-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
       <p className="eyebrow">{intro.subtitleAr}</p>
       <h1>{intro.titleAr}</h1>
-      <div className="start-desc">{renderFormattedText(intro.introAr)}</div>
-      <button className="btn-primary btn-glow" onClick={onContinue}>
-        {intro.buttonAr}
-      </button>
+      <div className="intro-page-dots">
+        {pages.map((_, i) => (
+          <span key={i} className={"intro-dot" + (i === step ? " intro-dot-active" : "")} />
+        ))}
+      </div>
+      <p className="intro-page-counter">
+        صفحة {step + 1} من {pages.length}
+      </p>
+      <div className="start-desc">{pages[step].map(renderIntroBlock)}</div>
+      <div className="intro-nav">
+        {step > 0 && (
+          <button className="btn-secondary" onClick={() => setStep((s) => s - 1)}>
+            السابق
+          </button>
+        )}
+        {!isLast && (
+          <button className="btn-primary" onClick={() => setStep((s) => s + 1)}>
+            التالي
+          </button>
+        )}
+        {isLast && (
+          <button className="btn-primary btn-glow" onClick={onContinue}>
+            {intro.buttonAr}
+          </button>
+        )}
+      </div>
     </section>
   );
 }

@@ -118,6 +118,119 @@ body {
   animation-play-state: paused;
 }
 
+.btn-secondary {
+  margin-top: 12px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid rgba(244, 239, 228, 0.25);
+  border-radius: 10px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--text);
+}
+
+/* ---------- Paged Level Intro (multi-step briefing) ---------- */
+
+.intro-page-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.intro-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(244, 239, 228, 0.2);
+}
+
+.intro-dot-active {
+  background: var(--gold);
+}
+
+.intro-page-counter {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  opacity: 0.75;
+  margin: 0 0 18px;
+}
+
+.intro-nav {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.intro-heading {
+  color: var(--gold);
+  font-size: 17px;
+  margin: 4px 0 10px;
+  text-align: start;
+}
+
+.intro-legend-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 10px;
+  line-height: 1.8;
+  color: var(--text-dim);
+  text-align: start;
+}
+
+.intro-legend-icon {
+  flex-shrink: 0;
+}
+
+.intro-quote {
+  text-align: center;
+  color: var(--gold-soft);
+  font-style: italic;
+  margin: 10px 0 0;
+}
+
+/* Cinematic note box: sound-effect / stage-direction callouts, kept
+   visually separate from the narrative text instead of inline. */
+.intro-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 0 0 14px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text-dim);
+  text-align: start;
+}
+
+.intro-note-icon {
+  font-style: normal;
+  font-size: 16px;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+
+.intro-note-sound {
+  background: rgba(199, 162, 74, 0.06);
+  border: 1px dashed rgba(199, 162, 74, 0.4);
+}
+
+.intro-note-direction {
+  background: rgba(143, 37, 54, 0.08);
+  border: 1px dashed rgba(143, 37, 54, 0.45);
+}
+
 @keyframes btn-glow-pulse {
   0%, 100% { box-shadow: 0 0 6px 0 rgba(199, 162, 74, 0.35); }
   50% { box-shadow: 0 0 22px 4px rgba(199, 162, 74, 0.75); }
