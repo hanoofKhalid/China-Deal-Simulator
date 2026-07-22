@@ -7,6 +7,7 @@ import {
   GUANXI_WARNING_THRESHOLD,
   LEVEL_INTROS,
 } from "./Story.js";
+import { playDoorSlam, playHeartbeat } from "./sfx.js";
 import "./App.css";
 
 function clamp(value) {
@@ -261,7 +262,10 @@ function GameScreen({ state, onChoice }) {
             key={index}
             type="button"
             className="choice-btn"
-            onClick={() => onChoice(node, choice)}
+            onClick={() => {
+              playHeartbeat();
+              onChoice(node, choice);
+            }}
           >
             <span className="choice-label-ar">{choice.label}</span>
             {choice.labelZh && <span className="choice-label-zh">{choice.labelZh}</span>}
@@ -344,6 +348,7 @@ export default function App() {
   const [state, setState] = useState(initialState);
 
   function handleStart() {
+    playDoorSlam();
     setState({ ...initialState(), screen: "game" });
   }
 
