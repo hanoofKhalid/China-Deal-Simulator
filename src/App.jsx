@@ -173,42 +173,18 @@ function GameScreen({ state, onChoice }) {
   );
 }
 
-function GameOverScreen({ text, onRestart }) {
-  return (
-    <section className="end-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
-      <p className="eyebrow eyebrow-danger">انتهت المحاكاة</p>
-      <h2>انسحب الطرف الصيني من اللقاء</h2>
-      <p id="gameover-text">{text}</p>
-      <button className="btn-primary" onClick={onRestart}>
-        إعادة المحاولة
-      </button>
-    </section>
-  );
-}
-
 const VERDICT_ICONS = { success: "✔", warning: "⚠", fail: "✗" };
 
-function EvaluationScreen({ state, onRestart }) {
-  const loggedKeys = EVENT_ORDER.filter((key) => state.log[key]);
+function DecisionLog({ log }) {
+  const loggedKeys = EVENT_ORDER.filter((key) => log[key]);
+  if (loggedKeys.length === 0) return null;
 
   return (
-    <section className="end-card end-card-wide" style={{ maxWidth: "600px", margin: "50px auto" }}>
-      <p className="eyebrow">شاشة التقييم والتبرير</p>
-      <h2>{scoreLabel(state.guanxi, state.mianzi)}</h2>
-      <div className="final-scores">
-        <div className="final-score">
-          <span>العلاقة (Guanxi)</span>
-          <strong>{state.guanxi} / 100</strong>
-        </div>
-        <div className="final-score">
-          <span>ماء الوجه (Mianzi)</span>
-          <strong>{state.mianzi} / 100</strong>
-        </div>
-      </div>
+    <>
       <h3 className="eval-section-title">تحليل أبرز القرارات</h3>
       <ul id="evaluation-list">
         {loggedKeys.map((key) => {
-          const entry = state.log[key];
+          const entry = log[key];
           const eventTitle = STORY[key]?.eventTitle || key;
           return (
             <li key={key} className={`eval-item eval-${entry.verdict}`}>
@@ -224,6 +200,40 @@ function EvaluationScreen({ state, onRestart }) {
           );
         })}
       </ul>
+    </>
+  );
+}
+
+function GameOverScreen({ state, onRestart }) {
+  return (
+    <section className="end-card end-card-wide" style={{ maxWidth: "600px", margin: "50px auto" }}>
+      <p className="eyebrow eyebrow-danger">انتهت المحاكاة</p>
+      <h2>انسحب الطرف الصيني من اللقاء</h2>
+      <p id="gameover-text">{state.gameoverText}</p>
+      <DecisionLog log={state.log} />
+      <button className="btn-primary" onClick={onRestart}>
+        إعادة المحاولة
+      </button>
+    </section>
+  );
+}
+
+function EvaluationScreen({ state, onRestart }) {
+  return (
+    <section className="end-card end-card-wide" style={{ maxWidth: "600px", margin: "50px auto" }}>
+      <p className="eyebrow">شاشة التقييم والتبرير</p>
+      <h2>{scoreLabel(state.guanxi, state.mianzi)}</h2>
+      <div className="final-scores">
+        <div className="final-score">
+          <span>العلاقة (Guanxi)</span>
+          <strong>{state.guanxi} / 100</strong>
+        </div>
+        <div className="final-score">
+          <span>ماء الوجه (Mianzi)</span>
+          <strong>{state.mianzi} / 100</strong>
+        </div>
+      </div>
+      <DecisionLog log={state.log} />
       <button className="btn-primary" onClick={onRestart}>
         إعادة المحاكاة
       </button>
@@ -310,7 +320,7 @@ export default function App() {
         <GameScreen state={state} onChoice={handleChoice} />
       )}
       {state.screen === "gameover" && (
-        <GameOverScreen text={state.gameoverText} onRestart={handleStart} />
+        <GameOverScreen state={state} onRestart={handleStart} />
       )}
       {state.screen === "evaluation" && (
         <EvaluationScreen state={state} onRestart={handleStart} />
