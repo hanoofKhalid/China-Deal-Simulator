@@ -186,7 +186,11 @@ function GameOverScreen({ text, onRestart }) {
   );
 }
 
-const VERDICT_LABELS = { success: "نجاح", warning: "تحذير", fail: "فشل" };
+const VERDICT_ICONS = { success: "✔", warning: "⚠", fail: "✗" };
+
+function shortEventTitle(fullTitle) {
+  return fullTitle.replace(/^الحدث\s+\S+:\s*/, "");
+}
 
 function EvaluationScreen({ state, onRestart }) {
   const loggedKeys = EVENT_ORDER.filter((key) => state.log[key]);
@@ -208,24 +212,16 @@ function EvaluationScreen({ state, onRestart }) {
       <ul id="evaluation-list">
         {loggedKeys.map((key) => {
           const entry = state.log[key];
-          const eventTitle = STORY[key]?.eventTitle || key;
+          const title = shortEventTitle(STORY[key]?.eventTitle || key);
           return (
             <li key={key} className={`eval-item eval-${entry.verdict}`}>
               <div className="eval-title">
-                {eventTitle}
-                <span
-                  style={{
-                    color: `var(--${entry.verdict})`,
-                    fontWeight: 700,
-                    fontSize: 12,
-                    marginInlineStart: 8,
-                  }}
-                >
-                  {VERDICT_LABELS[entry.verdict] || entry.verdict}
-                </span>
+                <span style={{ color: `var(--${entry.verdict})` }}>
+                  {VERDICT_ICONS[entry.verdict] || "•"}
+                </span>{" "}
+                {title}
               </div>
-              <div className="eval-choice">اختيارك: {entry.label}</div>
-              <div className="eval-analysis">{entry.analysis}</div>
+              <div className="eval-analysis">— {entry.analysis}</div>
             </li>
           );
         })}
