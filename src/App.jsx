@@ -186,7 +186,11 @@ function GameOverScreen({ text, onRestart }) {
   );
 }
 
+const VERDICT_LABELS = { success: "نجاح", warning: "تحذير", fail: "فشل" };
+
 function EvaluationScreen({ state, onRestart }) {
+  const loggedKeys = EVENT_ORDER.filter((key) => state.log[key]);
+
   return (
     <section className="end-card end-card-wide" style={{ maxWidth: "600px", margin: "50px auto" }}>
       <p className="eyebrow">شاشة التقييم والتبرير</p>
@@ -201,6 +205,31 @@ function EvaluationScreen({ state, onRestart }) {
           <strong>{state.mianzi} / 100</strong>
         </div>
       </div>
+      <ul id="evaluation-list">
+        {loggedKeys.map((key) => {
+          const entry = state.log[key];
+          const eventTitle = STORY[key]?.eventTitle || key;
+          return (
+            <li key={key} className={`eval-item eval-${entry.verdict}`}>
+              <div className="eval-title">
+                {eventTitle}
+                <span
+                  style={{
+                    color: `var(--${entry.verdict})`,
+                    fontWeight: 700,
+                    fontSize: 12,
+                    marginInlineStart: 8,
+                  }}
+                >
+                  {VERDICT_LABELS[entry.verdict] || entry.verdict}
+                </span>
+              </div>
+              <div className="eval-choice">اختيارك: {entry.label}</div>
+              <div className="eval-analysis">{entry.analysis}</div>
+            </li>
+          );
+        })}
+      </ul>
       <button className="btn-primary" onClick={onRestart}>
         إعادة المحاكاة
       </button>
