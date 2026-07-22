@@ -1,22 +1,26 @@
 :root {
-  --bg-panel: #0d1626;
-  --gold: #c7a24a;
-  --gold-soft: #e3c878;
+  --scene-red: #330000;
+  --bg-panel: #1a1a1a;
+  --gold: #ffd700;
+  --gold-soft: #ffe066;
   --red: #6d1b2a;
   --red-bright: #8f2536;
-  --text: #f4efe4;
-  --text-dim: #c3cad6;
-  --success: #4caf7d;
-  --warning: #c7a24a;
-  --fail: #8f2536;
+  --text: #ffffff;
+  --text-dim: #d6d6d6;
+  --success: #32cd32;
+  --warning: #ffcc00;
+  --fail: #ff4500;
 }
 
 body {
-  background-color: #060b14;
+  background-color: var(--scene-red);
+  background-image: radial-gradient(ellipse at center, #5c0000 0%, var(--scene-red) 45%, #0a0000 100%);
+  background-attachment: fixed;
   color: var(--text);
   font-family: inherit;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 #app {
@@ -43,7 +47,7 @@ body {
 
 .start-card, .end-card {
   background: var(--bg-panel);
-  border: 1px solid rgba(199, 162, 74, 0.35);
+  border: 1px solid rgba(255, 215, 0, 0.35);
   border-radius: 16px;
   padding: 36px 28px;
   text-align: center;
@@ -107,7 +111,7 @@ body {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(143, 37, 54, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 69, 0, 0.4);
 }
 
 .btn-glow {
@@ -122,7 +126,7 @@ body {
   margin-top: 12px;
   background: transparent;
   color: var(--text-dim);
-  border: 1px solid rgba(244, 239, 228, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 10px;
   padding: 14px 28px;
   font-size: 15px;
@@ -149,7 +153,7 @@ body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: rgba(244, 239, 228, 0.2);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .intro-dot-active {
@@ -222,18 +226,18 @@ body {
 }
 
 .intro-note-sound {
-  background: rgba(199, 162, 74, 0.06);
-  border: 1px dashed rgba(199, 162, 74, 0.4);
+  background: rgba(255, 215, 0, 0.06);
+  border: 1px dashed rgba(255, 215, 0, 0.4);
 }
 
 .intro-note-direction {
-  background: rgba(143, 37, 54, 0.08);
-  border: 1px dashed rgba(143, 37, 54, 0.45);
+  background: rgba(255, 69, 0, 0.08);
+  border: 1px dashed rgba(255, 69, 0, 0.45);
 }
 
 @keyframes btn-glow-pulse {
-  0%, 100% { box-shadow: 0 0 6px 0 rgba(199, 162, 74, 0.35); }
-  50% { box-shadow: 0 0 22px 4px rgba(199, 162, 74, 0.75); }
+  0%, 100% { box-shadow: 0 0 6px 0 rgba(255, 215, 0, 0.35); }
+  50% { box-shadow: 0 0 22px 4px rgba(255, 215, 0, 0.75); }
 }
 
 /* ---------- Game Screen & UI (صندوق الحوار والأزرار) ---------- */
@@ -247,7 +251,7 @@ body {
 .meter {
   flex: 1;
   background: var(--bg-panel);
-  border: 1px solid rgba(199, 162, 74, 0.25);
+  border: 1px solid rgba(255, 215, 0, 0.25);
   border-radius: 10px;
   padding: 10px 14px;
 }
@@ -278,7 +282,7 @@ body {
 }
 
 #warning-banner {
-  background: rgba(143, 37, 54, 0.2);
+  background: rgba(255, 69, 0, 0.2);
   border: 1px solid var(--fail);
   color: #ffb3ad;
   padding: 8px 14px;
@@ -290,8 +294,8 @@ body {
 
 /* 1. صندوق الحوار: Solid (غير شفاف تماماً واحترافي) */
 .dialogue-box {
-  background: #0d1626; /* لون صلب غير شفاف */
-  border: 1px solid rgba(199, 162, 74, 0.4);
+  background: #1a1a1a; /* لون صلب غير شفاف */
+  border: 1px solid rgba(255, 215, 0, 0.4);
   border-top: 3px solid var(--gold);
   border-radius: 14px;
   padding: 20px;
@@ -324,10 +328,10 @@ body {
   flex-direction: column;
   gap: 4px;
   text-align: right;
-  background: rgba(244, 239, 228, 0.08); /* خلفية شفافة ناعمة */
+  background: rgba(255, 255, 255, 0.08); /* خلفية شفافة ناعمة */
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(199, 162, 74, 0.4);
+  border: 1px solid rgba(255, 215, 0, 0.4);
   border-radius: 14px;
   color: var(--text);
   padding: 14px 18px;
@@ -339,7 +343,7 @@ body {
 }
 
 .choice-btn:hover {
-  background: rgba(199, 162, 74, 18);
+  background: rgba(255, 215, 0, 0.18);
   border-color: var(--gold);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
@@ -356,7 +360,7 @@ body {
 .final-score {
   flex: 1;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(199, 162, 74, 0.25);
+  border: 1px solid rgba(255, 215, 0, 0.25);
   border-radius: 10px;
   padding: 14px;
   text-align: center;
