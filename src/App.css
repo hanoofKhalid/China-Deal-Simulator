@@ -66,6 +66,7 @@ body {
   line-height: 1.9;
   color: var(--text-dim);
   margin: 0 0 16px;
+  white-space: pre-line;
 }
 
 .start-desc-small {

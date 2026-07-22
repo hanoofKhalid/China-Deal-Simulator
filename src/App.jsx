@@ -24,7 +24,7 @@ function scoreLabel(guanxi, mianzi) {
 function initialState() {
   return {
     screen: "start",
-    nodeId: "ev1",
+    nodeId: "level1_intro",
     guanxi: 50,
     mianzi: 50,
     lastVerdict: null,
