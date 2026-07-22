@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   STORY,
   EVENT_ORDER,
@@ -7,6 +7,7 @@ import {
   GUANXI_WARNING_THRESHOLD,
   LEVEL_INTROS,
 } from "./Story.js";
+import { playDoorSlam, playHeartbeat, playClockTick } from "./sfx.js";
 import "./App.css";
 
 function clamp(value) {
@@ -24,7 +25,7 @@ function scoreLabel(guanxi, mianzi) {
 function initialState() {
   return {
     screen: "start",
-    nodeId: "ev1",
+    nodeId: "level1_intro",
     guanxi: 50,
     mianzi: 50,
     lastVerdict: null,
@@ -49,15 +50,114 @@ function StartScreen({ onStart }) {
   );
 }
 
+function renderFormattedText(text) {
+  return text.split("\n").map((line, i) => (
+    <p key={i} className="start-desc-line">
+      {line.split(/(\*\*[^*]+\*\*)/g).map((part, j) =>
+        part.startsWith("**") && part.endsWith("**") ? (
+          <strong key={j}>{part.slice(2, -2)}</strong>
+        ) : (
+          part
+        )
+      )}
+    </p>
+  ));
+}
+
+function renderIntroBlock(block, i) {
+  switch (block.type) {
+    case "heading":
+      return (
+        <h3 key={i} className="intro-heading">
+          {block.text}
+        </h3>
+      );
+    case "legend":
+      return (
+        <div key={i} className="intro-legend-row">
+          <span className="intro-legend-icon">{block.icon}</span>
+          <span>
+            <strong>{block.label}:</strong> {block.text}
+          </span>
+        </div>
+      );
+    case "quote":
+      return (
+        <p key={i} className="intro-quote">
+          {block.text}
+        </p>
+      );
+    default:
+      return (
+        <p key={i} className="start-desc-line">
+          {block.text}
+        </p>
+      );
+  }
+}
+
 function LevelIntroScreen({ intro, onContinue }) {
+  const pages = intro.pagesAr;
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    if (!pages) return;
+    // الصفحة الأولى: صوت الباب مشغَّل مسبقاً عبر handleStart لحظة فتح المقدمة.
+    // الصفحة الأخيرة: تحمل ملاحظة دقات الساعة، فتُشغَّل هنا لحظة الوصول إليها.
+    if (step === pages.length - 1) {
+      playClockTick();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+
+  if (!pages) {
+    return (
+      <section className="start-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
+        <p className="eyebrow">{intro.subtitleAr}</p>
+        <h1>{intro.titleAr}</h1>
+        <div className="start-desc">{renderFormattedText(intro.introAr)}</div>
+        <button className="btn-primary btn-glow" onClick={onContinue}>
+          {intro.buttonAr}
+        </button>
+      </section>
+    );
+  }
+
+  const isLast = step === pages.length - 1;
+
   return (
-    <section className="start-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
+    <section className="start-card intro-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
+      {step === 0 && <div className="intro-red-flash" />}
       <p className="eyebrow">{intro.subtitleAr}</p>
       <h1>{intro.titleAr}</h1>
-      <p className="start-desc">{intro.introAr}</p>
-      <button className="btn-primary" onClick={onContinue}>
-        {intro.buttonAr}
-      </button>
+      <div className="intro-page-dots">
+        {pages.map((_, i) => (
+          <span key={i} className={"intro-dot" + (i === step ? " intro-dot-active" : "")} />
+        ))}
+      </div>
+      <p className="intro-page-counter">
+        صفحة {step + 1} من {pages.length}
+      </p>
+      <div className="start-desc intro-page-content" key={step}>
+        {pages[step].map(renderIntroBlock)}
+      </div>
+      <div className="intro-nav">
+        {step > 0 && (
+          <button className="btn-secondary" onClick={() => setStep((s) => s - 1)}>
+            السابق
+          </button>
+        )}
+        {!isLast && (
+          <button className="btn-primary" onClick={() => setStep((s) => s + 1)}>
+            التالي
+          </button>
+        )}
+        {isLast && (
+          <button className="btn-primary btn-glow" onClick={onContinue}>
+            {intro.buttonAr}
+          </button>
+        )}
+      </div>
     </section>
   );
 }
@@ -162,7 +262,10 @@ function GameScreen({ state, onChoice }) {
             key={index}
             type="button"
             className="choice-btn"
-            onClick={() => onChoice(node, choice)}
+            onClick={() => {
+              playHeartbeat();
+              onChoice(node, choice);
+            }}
           >
             <span className="choice-label-ar">{choice.label}</span>
             {choice.labelZh && <span className="choice-label-zh">{choice.labelZh}</span>}
@@ -173,12 +276,44 @@ function GameScreen({ state, onChoice }) {
   );
 }
 
-function GameOverScreen({ text, onRestart }) {
+const VERDICT_ICONS = { success: "✔", warning: "⚠", fail: "✗" };
+
+function DecisionLog({ log }) {
+  const loggedKeys = EVENT_ORDER.filter((key) => log[key]);
+  if (loggedKeys.length === 0) return null;
+
   return (
-    <section className="end-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
+    <>
+      <h3 className="eval-section-title">تحليل أبرز القرارات</h3>
+      <ul id="evaluation-list">
+        {loggedKeys.map((key) => {
+          const entry = log[key];
+          const eventTitle = STORY[key]?.eventTitle || key;
+          return (
+            <li key={key} className={`eval-item eval-${entry.verdict}`}>
+              <div className="eval-title">
+                <span style={{ color: `var(--${entry.verdict})` }}>
+                  {VERDICT_ICONS[entry.verdict] || "•"}
+                </span>{" "}
+                {eventTitle}
+              </div>
+              <div className="eval-choice">{entry.label}</div>
+              <div className="eval-analysis">{entry.analysis}</div>
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
+}
+
+function GameOverScreen({ state, onRestart }) {
+  return (
+    <section className="end-card end-card-wide" style={{ maxWidth: "600px", margin: "50px auto" }}>
       <p className="eyebrow eyebrow-danger">انتهت المحاكاة</p>
       <h2>انسحب الطرف الصيني من اللقاء</h2>
-      <p id="gameover-text">{text}</p>
+      <p id="gameover-text">{state.gameoverText}</p>
+      <DecisionLog log={state.log} />
       <button className="btn-primary" onClick={onRestart}>
         إعادة المحاولة
       </button>
@@ -201,6 +336,7 @@ function EvaluationScreen({ state, onRestart }) {
           <strong>{state.mianzi} / 100</strong>
         </div>
       </div>
+      <DecisionLog log={state.log} />
       <button className="btn-primary" onClick={onRestart}>
         إعادة المحاكاة
       </button>
@@ -212,6 +348,7 @@ export default function App() {
   const [state, setState] = useState(initialState);
 
   function handleStart() {
+    playDoorSlam();
     setState({ ...initialState(), screen: "game" });
   }
 
@@ -275,7 +412,9 @@ export default function App() {
   const isLevelIntro = state.screen === "game" && Boolean(LEVEL_INTROS[state.nodeId]);
 
   return (
-    <div id="app">
+    <>
+      <div id="ambient-glow" />
+      <div id="app">
       {state.screen === "start" && <StartScreen onStart={handleStart} />}
       {isLevelIntro && (
         <LevelIntroScreen
@@ -287,11 +426,12 @@ export default function App() {
         <GameScreen state={state} onChoice={handleChoice} />
       )}
       {state.screen === "gameover" && (
-        <GameOverScreen text={state.gameoverText} onRestart={handleStart} />
+        <GameOverScreen state={state} onRestart={handleStart} />
       )}
       {state.screen === "evaluation" && (
         <EvaluationScreen state={state} onRestart={handleStart} />
       )}
-    </div>
+      </div>
+    </>
   );
 }

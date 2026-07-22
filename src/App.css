@@ -1,30 +1,51 @@
 :root {
-  --bg-panel: #0d1626;
-  --gold: #c7a24a;
-  --gold-soft: #e3c878;
+  --scene-red: #330000;
+  --bg-panel: #1a1a1a;
+  --gold: #ffd700;
+  --gold-soft: #ffe066;
   --red: #6d1b2a;
   --red-bright: #8f2536;
-  --text: #f4efe4;
-  --text-dim: #c3cad6;
-  --success: #4caf7d;
-  --warning: #c7a24a;
-  --fail: #8f2536;
+  --text: #ffffff;
+  --text-dim: #d6d6d6;
+  --success: #32cd32;
+  --warning: #ffcc00;
+  --fail: #ff4500;
 }
 
 body {
-  background-color: #060b14;
+  background-color: var(--scene-red);
+  background-image: radial-gradient(ellipse at center, #5c0000 0%, var(--scene-red) 45%, #0a0000 100%);
+  background-attachment: fixed;
   color: var(--text);
   font-family: inherit;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 #app {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
+}
+
+/* توهج خلفي مستمر "يتنفس" ببطء خلف كل الشاشات، لإحساس سينمائي حي بدل ومضة مسطحة لمرة واحدة */
+#ambient-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 35%, rgba(150, 10, 10, 0.55) 0%, rgba(90, 0, 0, 0.25) 40%, rgba(0, 0, 0, 0) 70%);
+  animation: ambient-breathe 7s ease-in-out infinite;
+}
+
+@keyframes ambient-breathe {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
 }
 
 .eyebrow {
@@ -42,12 +63,14 @@ body {
 /* ---------- Start & End Cards ---------- */
 
 .start-card, .end-card {
+  position: relative;
   background: var(--bg-panel);
-  border: 1px solid rgba(199, 162, 74, 0.35);
+  border: 1px solid rgba(255, 215, 0, 0.35);
   border-radius: 16px;
   padding: 36px 28px;
   text-align: center;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
 }
 
 .start-card h1, .end-card h2 {
@@ -66,6 +89,19 @@ body {
   line-height: 1.9;
   color: var(--text-dim);
   margin: 0 0 16px;
+  white-space: pre-line;
+}
+
+.start-desc-line {
+  margin: 0 0 10px;
+}
+
+.start-desc-line:empty {
+  margin: 0 0 4px;
+}
+
+.start-desc-line strong {
+  color: var(--gold-soft);
 }
 
 .start-desc-small {
@@ -94,7 +130,127 @@ body {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(143, 37, 54, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 69, 0, 0.4);
+}
+
+.btn-glow {
+  animation: btn-glow-pulse 2.2s ease-in-out infinite;
+}
+
+.btn-glow:hover {
+  animation-play-state: paused;
+}
+
+.btn-secondary {
+  margin-top: 12px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--text);
+}
+
+/* ---------- Paged Level Intro (multi-step briefing) ---------- */
+
+.intro-page-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.intro-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.intro-dot-active {
+  background: var(--gold);
+}
+
+.intro-page-counter {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  opacity: 0.75;
+  margin: 0 0 18px;
+}
+
+.intro-nav {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.intro-heading {
+  color: var(--gold);
+  font-size: 17px;
+  margin: 4px 0 10px;
+  text-align: start;
+}
+
+.intro-legend-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 10px;
+  line-height: 1.8;
+  color: var(--text-dim);
+  text-align: start;
+}
+
+.intro-legend-icon {
+  flex-shrink: 0;
+}
+
+.intro-quote {
+  text-align: center;
+  color: var(--gold-soft);
+  font-style: italic;
+  margin: 10px 0 0;
+}
+
+.intro-page-content {
+  animation: intro-page-fade 0.6s ease both;
+}
+
+@keyframes intro-page-fade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ومضة إضاءة افتتاحية غنية على مرحلتين: ذروة سريعة ثم استقرار بطيء ناعم،
+   تتلاشى إلى التوهج المستمر (#ambient-glow) بدل قطع مفاجئ ومسطح. */
+.intro-red-flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(255, 40, 20, 0.75) 0%, rgba(200, 0, 0, 0.25) 45%, rgba(255, 0, 0, 0) 75%);
+  animation: intro-red-flash 2.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes intro-red-flash {
+  0% { opacity: 1; transform: scale(0.92); }
+  25% { opacity: 0.85; transform: scale(1.05); }
+  60% { opacity: 0.4; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes btn-glow-pulse {
+  0%, 100% { box-shadow: 0 0 6px 0 rgba(255, 215, 0, 0.35); }
+  50% { box-shadow: 0 0 22px 4px rgba(255, 215, 0, 0.75); }
 }
 
 /* ---------- Game Screen & UI (صندوق الحوار والأزرار) ---------- */
@@ -108,7 +264,7 @@ body {
 .meter {
   flex: 1;
   background: var(--bg-panel);
-  border: 1px solid rgba(199, 162, 74, 0.25);
+  border: 1px solid rgba(255, 215, 0, 0.25);
   border-radius: 10px;
   padding: 10px 14px;
 }
@@ -139,7 +295,7 @@ body {
 }
 
 #warning-banner {
-  background: rgba(143, 37, 54, 0.2);
+  background: rgba(255, 69, 0, 0.2);
   border: 1px solid var(--fail);
   color: #ffb3ad;
   padding: 8px 14px;
@@ -151,8 +307,8 @@ body {
 
 /* 1. صندوق الحوار: Solid (غير شفاف تماماً واحترافي) */
 .dialogue-box {
-  background: #0d1626; /* لون صلب غير شفاف */
-  border: 1px solid rgba(199, 162, 74, 0.4);
+  background: #1a1a1a; /* لون صلب غير شفاف */
+  border: 1px solid rgba(255, 215, 0, 0.4);
   border-top: 3px solid var(--gold);
   border-radius: 14px;
   padding: 20px;
@@ -185,10 +341,10 @@ body {
   flex-direction: column;
   gap: 4px;
   text-align: right;
-  background: rgba(244, 239, 228, 0.08); /* خلفية شفافة ناعمة */
+  background: rgba(255, 255, 255, 0.08); /* خلفية شفافة ناعمة */
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(199, 162, 74, 0.4);
+  border: 1px solid rgba(255, 215, 0, 0.4);
   border-radius: 14px;
   color: var(--text);
   padding: 14px 18px;
@@ -200,7 +356,7 @@ body {
 }
 
 .choice-btn:hover {
-  background: rgba(199, 162, 74, 18);
+  background: rgba(255, 215, 0, 0.18);
   border-color: var(--gold);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
@@ -217,7 +373,7 @@ body {
 .final-score {
   flex: 1;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(199, 162, 74, 0.25);
+  border: 1px solid rgba(255, 215, 0, 0.25);
   border-radius: 10px;
   padding: 14px;
   text-align: center;
@@ -233,6 +389,13 @@ body {
 .final-score strong {
   font-size: 22px;
   color: var(--gold);
+}
+
+.eval-section-title {
+  color: var(--gold);
+  font-size: 18px;
+  margin: 22px 0 10px;
+  text-align: start;
 }
 
 #evaluation-list {
