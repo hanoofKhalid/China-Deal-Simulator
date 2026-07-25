@@ -94,7 +94,10 @@ const specialNodeImages = {
 // يحدد خلفية المشهد بناءً على بادئة رقم اللفل في nodeId (l3.. مصنع، l4ev4 توقيع، l4.. اجتماعات، غير ذلك مطعم)
 function getBackgroundUrl(nodeId) {
   if (nodeId.startsWith("l4ev4")) return "url('/assets/backgrounds/signing.png')";
-  if (nodeId.startsWith("l4")) return "url('/assets/backgrounds/boardroom.png')";  if (nodeId.startsWith("l3")) return "url('/assets/backgrounds/factory.png')";
+  if (nodeId.startsWith("l4")) return "url('/assets/backgrounds/boardroom.png')";
+  if (nodeId.startsWith("l3")) return "url('/assets/backgrounds/factory.png')";
+  if (nodeId.startsWith("l5")) return "url('/assets/backgrounds/factory.png')";
+  if (nodeId.startsWith("l6")) return "url('/assets/backgrounds/boardroom.png')";
   return "url('/assets/backgrounds/restaurant.png')";
 }
 
