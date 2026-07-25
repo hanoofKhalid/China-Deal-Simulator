@@ -240,8 +240,12 @@ function GameOverScreen({ text, onRestart }) {
 }
 
 function EvaluationScreen({ state, onRestart }) {
+  const loggedEntries = EVENT_ORDER.map((key) => ({ key, entry: state.log[key] })).filter(
+    ({ entry }) => entry
+  );
+
   return (
-    <section className="end-card end-card-wide" style={{ maxWidth: "600px", margin: "50px auto" }}>
+    <section className="end-card end-card-wide" style={{ maxWidth: "700px", margin: "50px auto" }}>
       <p className="eyebrow">شاشة التقييم والتبرير</p>
       <h2>{scoreLabel(state.guanxi, state.mianzi)}</h2>
       <div className="final-scores">
@@ -254,6 +258,15 @@ function EvaluationScreen({ state, onRestart }) {
           <strong>{state.mianzi} / 100</strong>
         </div>
       </div>
+      <ul id="evaluation-list">
+        {loggedEntries.map(({ key, entry }) => (
+          <li key={key} className={`eval-item eval-${entry.verdict}`}>
+            <div className="eval-title">{entry.eventTitle}</div>
+            <div className="eval-choice">{entry.label}</div>
+            <div className="eval-analysis">{entry.analysis}</div>
+          </li>
+        ))}
+      </ul>
       <button className="btn-primary" onClick={onRestart}>
         إعادة المحاكاة
       </button>
@@ -305,6 +318,7 @@ export default function App() {
       const log = {
         ...prev.log,
         [node.eventKey]: {
+          eventTitle: node.eventTitle || node.branchTitle,
           label: choice.label,
           verdict: choice.verdict,
           analysis: choice.analysis,
