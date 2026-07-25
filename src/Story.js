@@ -14,6 +14,34 @@ export const EVENT_ORDER = [
 export const MIANZI_FAIL_THRESHOLD = 20;
 export const GUANXI_WARNING_THRESHOLD = 30;
 
+export const LEVELS = [
+  { id: 1, labelAr: "المستوى 1", nameAr: "الترحيب والبروتوكول", startNode: "ev1" },
+  { id: 2, labelAr: "المستوى 2", nameAr: "مأدبة العشاء وبناء الروابط", startNode: "level2_intro" },
+  { id: 3, labelAr: "المستوى 3", nameAr: "جولة المصنع وإدارة العيوب", startNode: "level3_intro" },
+  { id: 4, labelAr: "المستوى 4", nameAr: "طاولة الحسم وحفل التوقيع", startNode: "level4_intro" },
+  { id: 5, labelAr: "المستوى 5", nameAr: "التنفيذ وإدارة المخاطر", startNode: "level5_intro" },
+  { id: 6, labelAr: "المستوى 6", nameAr: "العلاقة طويلة المدى", startNode: "level6_intro" },
+];
+
+// عند الوصول لأي من هذه العقد أثناء اللعب، يكون المستوى المقابل (رقم - 1) قد اكتمل، فيُفتح المستوى التالي.
+export const LEVEL_UNLOCK_ON_REACH = {
+  level2_intro: 2,
+  level3_intro: 3,
+  level4_intro: 4,
+  level5_intro: 5,
+  level6_intro: 6,
+};
+
+export function getLevelIdForNode(nodeId) {
+  if (!nodeId) return 1;
+  if (nodeId.startsWith("l6") || nodeId === "level6_intro") return 6;
+  if (nodeId.startsWith("l5") || nodeId === "level5_intro") return 5;
+  if (nodeId.startsWith("l4") || nodeId === "level4_intro") return 4;
+  if (nodeId.startsWith("l3") || nodeId === "level3_intro") return 3;
+  if (nodeId.startsWith("l2") || nodeId === "level2_intro") return 2;
+  return 1;
+}
+
 export const LEVEL_INTROS = {
   level2_intro: {
     titleAr: "المرحلة الثانية: مأدبة العشاء وبناء الروابط",
