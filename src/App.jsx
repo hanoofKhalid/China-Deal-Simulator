@@ -6,9 +6,27 @@ import {
   MIANZI_FAIL_THRESHOLD,
   GUANXI_WARNING_THRESHOLD,
   LEVEL_INTROS,
+  LEVELS,
+  LEVEL_UNLOCK_ON_REACH,
+  getLevelIdForNode,
+  START_STATE,
 } from "./Story.js";
 import { playDoorSlam, playHeartbeat, playClockTick } from "./sfx.js";
 import "./App.css";
+
+const MAX_LEVEL_STORAGE_KEY = "chinaDealSimulator.maxUnlockedLevel";
+
+function loadMaxUnlockedLevel() {
+  if (typeof window === "undefined") return 1;
+  const parsed = parseInt(window.localStorage.getItem(MAX_LEVEL_STORAGE_KEY), 10);
+  if (Number.isNaN(parsed) || parsed < 1) return 1;
+  return Math.min(parsed, LEVELS.length);
+}
+
+function saveMaxUnlockedLevel(level) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(MAX_LEVEL_STORAGE_KEY, String(level));
+}
 
 function clamp(value) {
   return Math.max(0, Math.min(100, value));
@@ -26,11 +44,12 @@ function initialState() {
   return {
     screen: "start",
     nodeId: "level1_intro",
-    guanxi: 50,
-    mianzi: 50,
+    guanxi: START_STATE.guanxi,
+    mianzi: START_STATE.mianzi,
     lastVerdict: null,
     log: {},
     gameoverText: "",
+    maxUnlockedLevel: loadMaxUnlockedLevel(),
   };
 }
 
@@ -162,6 +181,37 @@ function LevelIntroScreen({ intro, onContinue }) {
   );
 }
 
+function LevelSidebar({ maxUnlockedLevel, currentLevelId, onSelectLevel }) {
+  return (
+    <nav className="level-sidebar">
+      <p className="level-sidebar-title">المستويات</p>
+      <div className="level-sidebar-list">
+        {LEVELS.map((level) => {
+          const unlocked = level.id <= maxUnlockedLevel;
+          const isCurrent = level.id === currentLevelId;
+          return (
+            <button
+              key={level.id}
+              type="button"
+              disabled={!unlocked}
+              title={unlocked ? level.nameAr : "أكمل المستوى السابق أولاً لفتح هذا المستوى"}
+              className={
+                "level-btn" +
+                (unlocked ? "" : " level-btn-locked") +
+                (isCurrent ? " level-btn-current" : "")
+              }
+              onClick={() => unlocked && onSelectLevel(level)}
+            >
+              <span className="level-btn-num">{unlocked ? level.id : "🔒"}</span>
+              <span className="level-btn-name">{level.nameAr}</span>
+            </button>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
+
 function Meter({ label, value, danger }) {
   return (
     <div className="meter">
@@ -194,7 +244,10 @@ const specialNodeImages = {
 // يحدد خلفية المشهد بناءً على بادئة رقم اللفل في nodeId (l3.. مصنع، l4ev4 توقيع، l4.. اجتماعات، غير ذلك مطعم)
 function getBackgroundUrl(nodeId) {
   if (nodeId.startsWith("l4ev4")) return "url('/assets/backgrounds/signing.png')";
-  if (nodeId.startsWith("l4")) return "url('/assets/backgrounds/boardroom.png')";  if (nodeId.startsWith("l3")) return "url('/assets/backgrounds/factory.png')";
+  if (nodeId.startsWith("l4")) return "url('/assets/backgrounds/boardroom.png')";
+  if (nodeId.startsWith("l3")) return "url('/assets/backgrounds/factory.png')";
+  if (nodeId.startsWith("l5")) return "url('/assets/backgrounds/factory.png')";
+  if (nodeId.startsWith("l6")) return "url('/assets/backgrounds/boardroom.png')";
   return "url('/assets/backgrounds/restaurant.png')";
 }
 
@@ -323,7 +376,7 @@ function GameOverScreen({ state, onRestart }) {
 
 function EvaluationScreen({ state, onRestart }) {
   return (
-    <section className="end-card end-card-wide" style={{ maxWidth: "600px", margin: "50px auto" }}>
+    <section className="end-card end-card-wide" style={{ maxWidth: "700px", margin: "50px auto" }}>
       <p className="eyebrow">شاشة التقييم والتبرير</p>
       <h2>{scoreLabel(state.guanxi, state.mianzi)}</h2>
       <div className="final-scores">
@@ -352,6 +405,19 @@ export default function App() {
     setState({ ...initialState(), screen: "game" });
   }
 
+  function handleSelectLevel(level) {
+    setState((prev) => ({
+      ...prev,
+      screen: "game",
+      nodeId: level.startNode,
+      guanxi: START_STATE.guanxi,
+      mianzi: START_STATE.mianzi,
+      lastVerdict: null,
+      log: {},
+      gameoverText: "",
+    }));
+  }
+
   function handleLevelIntroContinue() {
     setState((prev) => ({
       ...prev,
@@ -376,6 +442,7 @@ export default function App() {
       const log = {
         ...prev.log,
         [node.eventKey]: {
+          eventTitle: node.eventTitle || node.branchTitle,
           label: choice.label,
           verdict: choice.verdict,
           analysis: choice.analysis,
@@ -394,8 +461,23 @@ export default function App() {
         };
       }
 
+      const unlockedLevel = LEVEL_UNLOCK_ON_REACH[choice.next];
+      let maxUnlockedLevel = prev.maxUnlockedLevel;
+      if (unlockedLevel && unlockedLevel > maxUnlockedLevel) {
+        maxUnlockedLevel = unlockedLevel;
+        saveMaxUnlockedLevel(maxUnlockedLevel);
+      }
+
       if (choice.next === "evaluation") {
-        return { ...prev, guanxi, mianzi, log, lastVerdict: choice.verdict, screen: "evaluation" };
+        return {
+          ...prev,
+          guanxi,
+          mianzi,
+          log,
+          lastVerdict: choice.verdict,
+          screen: "evaluation",
+          maxUnlockedLevel,
+        };
       }
 
       return {
@@ -405,32 +487,41 @@ export default function App() {
         log,
         lastVerdict: choice.verdict,
         nodeId: choice.next || "ev1",
+        maxUnlockedLevel,
       };
     });
   }
 
   const isLevelIntro = state.screen === "game" && Boolean(LEVEL_INTROS[state.nodeId]);
+  const currentLevelId = getLevelIdForNode(state.nodeId);
 
   return (
     <>
       <div id="ambient-glow" />
       <div id="app">
-      {state.screen === "start" && <StartScreen onStart={handleStart} />}
-      {isLevelIntro && (
-        <LevelIntroScreen
-          intro={LEVEL_INTROS[state.nodeId]}
-          onContinue={handleLevelIntroContinue}
+        <LevelSidebar
+          maxUnlockedLevel={state.maxUnlockedLevel}
+          currentLevelId={currentLevelId}
+          onSelectLevel={handleSelectLevel}
         />
-      )}
-      {state.screen === "game" && !isLevelIntro && (
-        <GameScreen state={state} onChoice={handleChoice} />
-      )}
-      {state.screen === "gameover" && (
-        <GameOverScreen state={state} onRestart={handleStart} />
-      )}
-      {state.screen === "evaluation" && (
-        <EvaluationScreen state={state} onRestart={handleStart} />
-      )}
+        <div id="app-main">
+          {state.screen === "start" && <StartScreen onStart={handleStart} />}
+          {isLevelIntro && (
+            <LevelIntroScreen
+              intro={LEVEL_INTROS[state.nodeId]}
+              onContinue={handleLevelIntroContinue}
+            />
+          )}
+          {state.screen === "game" && !isLevelIntro && (
+            <GameScreen state={state} onChoice={handleChoice} />
+          )}
+          {state.screen === "gameover" && (
+            <GameOverScreen state={state} onRestart={handleStart} />
+          )}
+          {state.screen === "evaluation" && (
+            <EvaluationScreen state={state} onRestart={handleStart} />
+          )}
+        </div>
       </div>
     </>
   );
