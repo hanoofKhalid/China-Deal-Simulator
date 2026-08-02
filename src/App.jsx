@@ -221,7 +221,7 @@ function AboutModal({ onClose }) {
   );
 }
 
-function LevelSidebar({ maxUnlockedLevel, currentLevelId, onSelectLevel }) {
+function LevelSidebar({ maxUnlockedLevel, currentLevelId, onSelectLevel, onResetProgress }) {
   return (
     <nav className="level-sidebar">
       <p className="level-sidebar-title">المستويات</p>
@@ -248,6 +248,11 @@ function LevelSidebar({ maxUnlockedLevel, currentLevelId, onSelectLevel }) {
           );
         })}
       </div>
+      {maxUnlockedLevel > 1 && (
+        <button type="button" className="reset-progress-btn" onClick={onResetProgress}>
+          إعادة تعيين التقدم
+        </button>
+      )}
     </nav>
   );
 }
@@ -466,6 +471,15 @@ export default function App() {
     }));
   }
 
+  function handleResetProgress() {
+    const confirmed = window.confirm(
+      "سيتم قفل جميع المستويات ما عدا المستوى الأول من جديد، ولن تتمكن من الوصول إليها إلا بعد إنهاء ما قبلها بالترتيب. هل تريد المتابعة؟"
+    );
+    if (!confirmed) return;
+    saveMaxUnlockedLevel(1);
+    setState(initialState());
+  }
+
   function handleLevelIntroContinue() {
     setState((prev) => ({
       ...prev,
@@ -559,6 +573,7 @@ export default function App() {
           maxUnlockedLevel={state.maxUnlockedLevel}
           currentLevelId={currentLevelId}
           onSelectLevel={handleSelectLevel}
+          onResetProgress={handleResetProgress}
         />
         <div id="app-main">
           {state.screen === "start" && <StartScreen onStart={handleStart} />}

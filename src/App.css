@@ -123,6 +123,27 @@ body {
   transform: none;
 }
 
+.reset-progress-btn {
+  margin-top: 12px;
+  width: 100%;
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  color: var(--text-dim);
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: all 0.15s ease;
+}
+
+.reset-progress-btn:hover {
+  opacity: 1;
+  border-color: var(--fail);
+  color: var(--fail);
+}
+
 @media (max-width: 760px) {
   #app {
     flex-direction: column;
