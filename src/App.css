@@ -224,6 +224,41 @@ body {
   font-size: 13px;
   color: var(--text-dim);
   opacity: 0.85;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(255, 215, 0, 0.2);
+}
+
+.title-zh {
+  margin: 2px 0 16px;
+  font-size: 14px;
+  color: var(--text-dim);
+  opacity: 0.85;
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+.intro-heading-zh {
+  margin: -6px 0 10px;
+  font-size: 13px;
+  color: var(--text-dim);
+  opacity: 0.8;
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  text-align: start;
+}
+
+.intro-legend-zh {
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.intro-quote-zh {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+  opacity: 0.8;
+  margin: 4px 0 0;
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
 .btn-primary {
@@ -434,10 +469,29 @@ body {
   font-size: 15px;
 }
 
+.dialogue-speaker-zh {
+  color: var(--text-dim);
+  font-weight: 400;
+  font-size: 13px;
+  opacity: 0.85;
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
 .dialogue-text {
   color: var(--text);
   line-height: 1.9;
   font-size: 17px;
+}
+
+.dialogue-text-zh {
+  color: var(--text-dim);
+  line-height: 1.8;
+  font-size: 14px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(255, 215, 0, 0.2);
+  opacity: 0.9;
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
 /* 2. أزرار الاختيارات: شفافة (Translucent / Glassmorphic) */
@@ -464,6 +518,18 @@ body {
   line-height: 1.6;
   cursor: pointer;
   transition: all 0.15s ease;
+}
+
+.choice-label-ar {
+  display: block;
+}
+
+.choice-label-zh {
+  display: block;
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+  opacity: 0.85;
 }
 
 .choice-btn:hover {
@@ -500,6 +566,15 @@ body {
 .final-score strong {
   font-size: 22px;
   color: var(--gold);
+}
+
+#gameover-text-zh {
+  color: var(--text-dim);
+  font-size: 13px;
+  opacity: 0.85;
+  margin-top: -8px;
+  margin-bottom: 16px;
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 
 .eval-section-title {
