@@ -29,6 +29,18 @@ function saveMaxUnlockedLevel(level) {
   window.localStorage.setItem(MAX_LEVEL_STORAGE_KEY, String(level));
 }
 
+const LAYOUT_MODE_STORAGE_KEY = "chinaDealSimulator.layoutMode";
+
+function loadLayoutMode() {
+  if (typeof window === "undefined") return "vertical";
+  return window.localStorage.getItem(LAYOUT_MODE_STORAGE_KEY) === "horizontal" ? "horizontal" : "vertical";
+}
+
+function saveLayoutMode(mode) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(LAYOUT_MODE_STORAGE_KEY, mode);
+}
+
 function clamp(value) {
   return Math.max(0, Math.min(100, value));
 }
@@ -221,10 +233,26 @@ function AboutModal({ onClose }) {
   );
 }
 
-function LevelSidebar({ maxUnlockedLevel, currentLevelId, onSelectLevel, onResetProgress }) {
+function LayoutToggleButton({ layoutMode, onToggle }) {
+  const isHorizontal = layoutMode === "horizontal";
+  return (
+    <button
+      type="button"
+      className="layout-toggle-btn"
+      onClick={onToggle}
+      title="التبديل بين الوضع الأفقي والوضع العمودي"
+    >
+      <span className="layout-toggle-icon">{isHorizontal ? "🖥️" : "📱"}</span>
+      <span>{isHorizontal ? "الوضع الأفقي" : "الوضع العمودي"}</span>
+    </button>
+  );
+}
+
+function LevelSidebar({ maxUnlockedLevel, currentLevelId, onSelectLevel, onResetProgress, layoutMode, onToggleLayout }) {
   return (
     <nav className="level-sidebar">
       <p className="level-sidebar-title">المستويات</p>
+      <LayoutToggleButton layoutMode={layoutMode} onToggle={onToggleLayout} />
       <div className="level-sidebar-list">
         {LEVELS.map((level) => {
           const unlocked = level.id <= maxUnlockedLevel;
@@ -336,44 +364,48 @@ function GameScreen({ state, onChoice }) {
       </div>
       {showWarning && <div id="warning-banner">تحذير: العلاقة مهددة</div>}
 
-                 {imageSrc && (
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", height: "58vh" }}>
-          <img
-            src={imageSrc}
-            alt={node.speaker}
-            style={{ maxHeight: "100%", width: "auto", objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.6))" }}
-            onError={(e) => {
-              console.log("Image load failed:", e.target.src);
-              e.target.style.display = "none";
-            }}
-          />
-        </div>
-      )}
+      <div className="scene-layout">
+        {imageSrc && (
+          <div className="scene-portrait">
+            <img
+              src={imageSrc}
+              alt={node.speaker}
+              style={{ maxHeight: "100%", width: "auto", objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.6))" }}
+              onError={(e) => {
+                console.log("Image load failed:", e.target.src);
+                e.target.style.display = "none";
+              }}
+            />
+          </div>
+        )}
 
-      <div className="dialogue-box">
-        <div className="dialogue-speaker">
-          {node.speaker}
-          {node.speakerZh && <span className="dialogue-speaker-zh"> · {node.speakerZh}</span>}
-        </div>
-        <div className="dialogue-text">{node.text}</div>
-        {node.textZh && <div className="dialogue-text-zh">{node.textZh}</div>}
-      </div>
+        <div className="scene-content">
+          <div className="dialogue-box">
+            <div className="dialogue-speaker">
+              {node.speaker}
+              {node.speakerZh && <span className="dialogue-speaker-zh"> · {node.speakerZh}</span>}
+            </div>
+            <div className="dialogue-text">{node.text}</div>
+            {node.textZh && <div className="dialogue-text-zh">{node.textZh}</div>}
+          </div>
 
-      <div className="choice-list">
-        {node.choices && node.choices.map((choice, index) => (
-          <button
-            key={index}
-            type="button"
-            className="choice-btn"
-            onClick={() => {
-              playHeartbeat();
-              onChoice(node, choice);
-            }}
-          >
-            <span className="choice-label-ar">{choice.label}</span>
-            {choice.labelZh && <span className="choice-label-zh">{choice.labelZh}</span>}
-          </button>
-        ))}
+          <div className="choice-list">
+            {node.choices && node.choices.map((choice, index) => (
+              <button
+                key={index}
+                type="button"
+                className="choice-btn"
+                onClick={() => {
+                  playHeartbeat();
+                  onChoice(node, choice);
+                }}
+              >
+                <span className="choice-label-ar">{choice.label}</span>
+                {choice.labelZh && <span className="choice-label-zh">{choice.labelZh}</span>}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -451,6 +483,15 @@ function EvaluationScreen({ state, onRestart }) {
 export default function App() {
   const [state, setState] = useState(initialState);
   const [showAbout, setShowAbout] = useState(false);
+  const [layoutMode, setLayoutMode] = useState(loadLayoutMode);
+
+  function handleToggleLayout() {
+    setLayoutMode((prev) => {
+      const next = prev === "horizontal" ? "vertical" : "horizontal";
+      saveLayoutMode(next);
+      return next;
+    });
+  }
 
   function handleStart() {
     playDoorSlam();
@@ -568,12 +609,14 @@ export default function App() {
         </button>
       )}
       {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
-      <div id="app">
+      <div id="app" className={layoutMode === "horizontal" ? "layout-horizontal" : ""}>
         <LevelSidebar
           maxUnlockedLevel={state.maxUnlockedLevel}
           currentLevelId={currentLevelId}
           onSelectLevel={handleSelectLevel}
           onResetProgress={handleResetProgress}
+          layoutMode={layoutMode}
+          onToggleLayout={handleToggleLayout}
         />
         <div id="app-main">
           {state.screen === "start" && <StartScreen onStart={handleStart} />}

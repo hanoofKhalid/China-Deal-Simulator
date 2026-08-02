@@ -62,6 +62,37 @@ body {
   color: var(--gold-soft);
 }
 
+/* ---------- Layout Toggle (أفقي / عمودي) ---------- */
+
+.layout-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0 0 14px;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 10px;
+  color: var(--text);
+  padding: 9px 10px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.layout-toggle-btn:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.layout-toggle-icon {
+  font-size: 15px;
+}
+
 .level-sidebar-list {
   display: flex;
   flex-direction: column;
@@ -470,6 +501,73 @@ body {
   text-align: center;
   font-size: 14px;
   margin-bottom: 12px;
+}
+
+/* ---------- Scene Layout (الوضع العمودي افتراضياً، يتحول لأفقي عبر .layout-horizontal) ---------- */
+
+.scene-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.scene-portrait {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 58vh;
+}
+
+.scene-content {
+  width: 100%;
+}
+
+/* ---------- الوضع الأفقي (Horizontal / Widescreen) ----------
+   صورة الشخصية بجانب صندوق الحوار والخيارات بدلاً من فوقهما، مع توسيع
+   المساحة الكلية للاستفادة من شاشات اللابتوب والشاشات الكبيرة. */
+
+#app.layout-horizontal {
+  max-width: 1480px;
+}
+
+.layout-horizontal .scene-layout {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 28px;
+}
+
+.layout-horizontal .scene-portrait {
+  flex: 0 0 40%;
+  height: 74vh;
+}
+
+.layout-horizontal .scene-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.layout-horizontal .start-card,
+.layout-horizontal .end-card {
+  max-width: 720px !important;
+}
+
+/* على الشاشات الضيقة (جوال) نرجع تلقائياً للتنسيق العمودي حتى لو كان
+   الوضع الأفقي مفعّلاً، لأن الشاشة لا تتسع لصف جنبي مريح. */
+@media (max-width: 900px) {
+  #app.layout-horizontal {
+    max-width: 1080px;
+  }
+
+  .layout-horizontal .scene-layout {
+    flex-direction: column;
+  }
+
+  .layout-horizontal .scene-portrait {
+    flex: 0 0 auto;
+    height: 58vh;
+  }
 }
 
 /* 1. صندوق الحوار: Solid (غير شفاف تماماً واحترافي) */
