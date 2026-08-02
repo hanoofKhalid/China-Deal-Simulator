@@ -60,7 +60,7 @@ function StartScreen({ onStart }) {
       <h1>محاكي الصفقات الصينية</h1>
       <h2>البروتوكولات والعلاقات التجارية (Guanxi)</h2>
       <p className="start-desc">
-        اضغطي على الزر أدناه لبدء المحاكاة واستعراض المشاهد.
+        اضغط على الزر أدناه لبدء المحاكاة واستعراض المشاهد.
       </p>
       <button className="btn-primary" onClick={onStart}>
         ابدأ المحاكاة
