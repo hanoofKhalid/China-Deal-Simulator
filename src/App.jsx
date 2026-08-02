@@ -181,6 +181,36 @@ function LevelIntroScreen({ intro, onContinue }) {
   );
 }
 
+function AboutModal({ onClose }) {
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+        <button type="button" className="modal-close" onClick={onClose} aria-label="إغلاق">
+          ×
+        </button>
+        <h2 className="modal-title">عن المشروع والمراجع</h2>
+
+        <section className="modal-section">
+          <h3 className="modal-section-title">عن المشروع (About)</h3>
+          <p className="modal-section-text">
+            هذا المشروع هو مشروع تخرج لقسم اللغة الصينية في جامعة الأميرة نورة بنت عبد الرحمن (PNU)، من إعداد
+            الطالبات: الهنوف خالد العيد ورزان تركي السلمي.
+          </p>
+        </section>
+
+        <section className="modal-section">
+          <h3 className="modal-section-title">المراجع (References)</h3>
+          <p className="modal-section-text">
+            استُلهمت سيناريوهات ومستويات هذه اللعبة بناءً على الإطار المنهجي والمفاتيح العملية الواردة في مرجع: شفرة
+            التفاوض مع الصين (مفتاحا عمليا لشراكات سعودية صينية ناجحة)، تأليف أ.د. أحمد بن علي الزهراني، جامعة جدة،
+            دار كيان للنشر والتوزيع.
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
 function LevelSidebar({ maxUnlockedLevel, currentLevelId, onSelectLevel }) {
   return (
     <nav className="level-sidebar">
@@ -234,6 +264,7 @@ const characterImageMap = {
   "السيدة لي": "Ms.li",
   "السيدة تشن": "Mr.chen",
   "المدير وانغ": "ManagerWang",
+  "نورة": "Ms.Nora",
 };
 
 // صور خاصة بمشاهد معيّنة (تتجاوز صورة التعبير العادية)
@@ -399,6 +430,7 @@ function EvaluationScreen({ state, onRestart }) {
 
 export default function App() {
   const [state, setState] = useState(initialState);
+  const [showAbout, setShowAbout] = useState(false);
 
   function handleStart() {
     playDoorSlam();
@@ -498,6 +530,12 @@ export default function App() {
   return (
     <>
       <div id="ambient-glow" />
+      {state.screen === "start" && (
+        <button type="button" className="about-btn" onClick={() => setShowAbout(true)}>
+          عن المشروع والمراجع
+        </button>
+      )}
+      {showAbout && <AboutModal onClose={() => setShowAbout(false)} />}
       <div id="app">
         <LevelSidebar
           maxUnlockedLevel={state.maxUnlockedLevel}
@@ -523,6 +561,7 @@ export default function App() {
           )}
         </div>
       </div>
+      <div className="watermark">Graduation Project 2026 | AlHanoof & Razan</div>
     </>
   );
 }

@@ -533,3 +533,125 @@ body {
 .eval-title { font-weight: 700; margin-bottom: 4px; }
 .eval-choice { font-size: 13px; color: var(--text-dim); margin-bottom: 6px; }
 .eval-analysis { font-size: 14px; line-height: 1.8; }
+
+/* ---------- About Button & Modal ---------- */
+
+.about-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 15;
+  background: rgba(26, 26, 26, 0.75);
+  color: var(--text-dim);
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: all 0.15s ease;
+}
+
+.about-btn:hover {
+  border-color: var(--gold);
+  color: var(--text);
+  background: rgba(26, 26, 26, 0.92);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--bg-panel);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  text-align: start;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.modal-close:hover {
+  color: var(--gold);
+}
+
+.modal-title {
+  margin: 0 0 20px;
+  font-size: 22px;
+  color: var(--gold);
+  text-align: center;
+}
+
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-section:last-child {
+  margin-bottom: 0;
+}
+
+.modal-section-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: var(--gold-soft);
+}
+
+.modal-section-text {
+  margin: 0;
+  color: var(--text-dim);
+  line-height: 1.9;
+  font-size: 14px;
+}
+
+/* ---------- Watermark ---------- */
+
+.watermark {
+  position: fixed;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+  direction: ltr;
+}
+
+@media (max-width: 760px) {
+  .about-btn {
+    top: 12px;
+    left: 12px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
