@@ -97,14 +97,13 @@ function renderFormattedText(text) {
   ));
 }
 
-function renderIntroBlock(block, zhBlock, i) {
+function renderIntroBlock(block, i) {
   switch (block.type) {
     case "heading":
       return (
-        <div key={i}>
-          <h3 className="intro-heading">{block.text}</h3>
-          {zhBlock && <p className="intro-heading-zh">{zhBlock.text}</p>}
-        </div>
+        <h3 key={i} className="intro-heading">
+          {block.text}
+        </h3>
       );
     case "legend":
       return (
@@ -112,23 +111,20 @@ function renderIntroBlock(block, zhBlock, i) {
           <span className="intro-legend-icon">{block.icon}</span>
           <span>
             <strong>{block.label}:</strong> {block.text}
-            {zhBlock && <span className="intro-legend-zh"> — {zhBlock.text}</span>}
           </span>
         </div>
       );
     case "quote":
       return (
-        <div key={i}>
-          <p className="intro-quote">{block.text}</p>
-          {zhBlock && <p className="intro-quote-zh">{zhBlock.text}</p>}
-        </div>
+        <p key={i} className="intro-quote">
+          {block.text}
+        </p>
       );
     default:
       return (
-        <div key={i}>
-          <p className="start-desc-line">{block.text}</p>
-          {zhBlock && <p className="start-desc-line start-desc-zh">{zhBlock.text}</p>}
-        </div>
+        <p key={i} className="start-desc-line">
+          {block.text}
+        </p>
       );
   }
 }
@@ -152,9 +148,7 @@ function LevelIntroScreen({ intro, onContinue }) {
       <section className="start-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
         <p className="eyebrow">{intro.subtitleAr}</p>
         <h1>{intro.titleAr}</h1>
-        {intro.titleZh && <p className="title-zh">{intro.titleZh}</p>}
         <div className="start-desc">{renderFormattedText(intro.introAr)}</div>
-        {intro.introZh && <div className="start-desc start-desc-zh">{renderFormattedText(intro.introZh)}</div>}
         <button className="btn-primary btn-glow" onClick={onContinue}>
           {intro.buttonAr}
         </button>
@@ -163,14 +157,12 @@ function LevelIntroScreen({ intro, onContinue }) {
   }
 
   const isLast = step === pages.length - 1;
-  const zhPage = intro.pagesZh && intro.pagesZh[step];
 
   return (
     <section className="start-card intro-card" style={{ maxWidth: "600px", margin: "50px auto" }}>
       {step === 0 && <div className="intro-red-flash" />}
       <p className="eyebrow">{intro.subtitleAr}</p>
       <h1>{intro.titleAr}</h1>
-      {intro.titleZh && <p className="title-zh">{intro.titleZh}</p>}
       <div className="intro-page-dots">
         {pages.map((_, i) => (
           <span key={i} className={"intro-dot" + (i === step ? " intro-dot-active" : "")} />
@@ -180,7 +172,7 @@ function LevelIntroScreen({ intro, onContinue }) {
         صفحة {step + 1} من {pages.length}
       </p>
       <div className="start-desc intro-page-content" key={step}>
-        {pages[step].map((block, i) => renderIntroBlock(block, zhPage && zhPage[i], i))}
+        {pages[step].map(renderIntroBlock)}
       </div>
       <div className="intro-nav">
         {step > 0 && (
@@ -381,12 +373,8 @@ function GameScreen({ state, onChoice }) {
 
         <div className="scene-content">
           <div className="dialogue-box">
-            <div className="dialogue-speaker">
-              {node.speaker}
-              {node.speakerZh && <span className="dialogue-speaker-zh"> · {node.speakerZh}</span>}
-            </div>
+            <div className="dialogue-speaker">{node.speaker}</div>
             <div className="dialogue-text">{node.text}</div>
-            {node.textZh && <div className="dialogue-text-zh">{node.textZh}</div>}
           </div>
 
           <div className="choice-list">
@@ -401,7 +389,6 @@ function GameScreen({ state, onChoice }) {
                 }}
               >
                 <span className="choice-label-ar">{choice.label}</span>
-                {choice.labelZh && <span className="choice-label-zh">{choice.labelZh}</span>}
               </button>
             ))}
           </div>
@@ -448,7 +435,6 @@ function GameOverScreen({ state, onRestart }) {
       <p className="eyebrow eyebrow-danger">انتهت المحاكاة</p>
       <h2>انسحب الطرف الصيني من اللقاء</h2>
       <p id="gameover-text">{state.gameoverText}</p>
-      {state.gameoverTextZh && <p id="gameover-text-zh">{state.gameoverTextZh}</p>}
       <DecisionLog log={state.log} />
       <button className="btn-primary" onClick={onRestart}>
         إعادة المحاولة
