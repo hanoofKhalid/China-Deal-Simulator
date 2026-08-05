@@ -825,6 +825,67 @@ body {
   font-size: 14px;
 }
 
+.modal-section a {
+  color: var(--gold-soft);
+  text-decoration: underline;
+}
+
+.modal-section a:hover {
+  color: var(--gold);
+}
+
+.modal-team-label {
+  margin: 0 0 6px;
+  color: var(--text-dim);
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.modal-team-list {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-team-list li {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.modal-team-list strong {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.modal-team-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.modal-plain-list {
+  margin: 0;
+  padding-inline-start: 20px;
+  color: var(--text-dim);
+  line-height: 1.9;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-plain-list strong {
+  color: var(--text);
+}
+
 /* ---------- Watermark ---------- */
 
 .watermark {

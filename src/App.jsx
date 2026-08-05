@@ -205,20 +205,84 @@ function AboutModal({ onClose }) {
         <h2 className="modal-title">عن المشروع والمراجع</h2>
 
         <section className="modal-section">
-          <h3 className="modal-section-title">عن المشروع (About)</h3>
+          <h3 className="modal-section-title">نبذة عن المشروع</h3>
           <p className="modal-section-text">
-            هذا المشروع هو مشروع تخرج لقسم اللغة الصينية في جامعة الأميرة نورة بنت عبد الرحمن (PNU)، من إعداد
-            الطالبات: الهنوف خالد العيد ورزان تركي السلمي.
+            هذا المحاكي هو مشروع تخرج لطالبات برنامج اللغة الصينية، قسم اللغات الآسيوية، كلية اللغات، جامعة الأميرة
+            نورة بنت عبدالرحمن.
           </p>
         </section>
 
         <section className="modal-section">
-          <h3 className="modal-section-title">المراجع (References)</h3>
+          <h3 className="modal-section-title">فريق العمل</h3>
+          <p className="modal-team-label">إعداد الطالبات:</p>
+          <ul className="modal-team-list">
+            <li>
+              <strong>الهنوف خالد العيد</strong>
+              <div className="modal-team-contact">
+                <span>البريد الإلكتروني: hanoof.khaled28@gmail.com</span>
+                <a
+                  href="https://www.linkedin.com/in/alhanoof-aleid-%E5%93%88%E5%8A%AA%E8%8A%99-9a9060211?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  حساب لينكد إن
+                </a>
+              </div>
+            </li>
+            <li>
+              <strong>رازان تركي السلمي</strong>
+              <div className="modal-team-contact">
+                <span>البريد الإلكتروني: (يُضاف لاحقاً)</span>
+                <a
+                  href="https://www.linkedin.com/in/razan-alselmi-0a76b52a9?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  حساب لينكد إن
+                </a>
+              </div>
+            </li>
+          </ul>
+          <p className="modal-team-label">إشراف:</p>
+          <p className="modal-section-text">أ. د. سبأ (يُضاف الاسم الكامل والبريد الإلكتروني لاحقاً)</p>
+        </section>
+
+        <section className="modal-section">
+          <h3 className="modal-section-title">المصادر والمراجع</h3>
           <p className="modal-section-text">
-            استُلهمت سيناريوهات ومستويات هذه اللعبة بناءً على الإطار المنهجي والمفاتيح العملية الواردة في مرجع: شفرة
-            التفاوض مع الصين (مفتاحا عمليا لشراكات سعودية صينية ناجحة)، تأليف أ.د. أحمد بن علي الزهراني، جامعة جدة،
-            دار كيان للنشر والتوزيع.
+            كتاب: شفرة التفاوض مع الصين: 21 مفتاحاً عملياً. متوفر على{" "}
+            <a href="https://kayanstore.com/product/the-code-to-negotiating-with-china-21-practical-keys-2/" target="_blank" rel="noopener noreferrer">
+              متجر كيان
+            </a>
+            .
           </p>
+        </section>
+
+        <section className="modal-section">
+          <h3 className="modal-section-title">أدوات التقنية والتطوير</h3>
+          <ul className="modal-plain-list">
+            <li>
+              <strong>React & Vite:</strong> إطار العمل والبيئة البرمجية المستخدمة في بناء وتطوير واجهات المحاكي
+              التفاعلي (China-Deal-Simulator).
+            </li>
+            <li>
+              <strong>VS Code:</strong> بيئة التطوير المتكاملة لكتابة وتنسيق وتصحيح أكواد المشروع.
+            </li>
+          </ul>
+        </section>
+
+        <section className="modal-section">
+          <h3 className="modal-section-title">أدوات الذكاء الاصطناعي والمساعدات الرقمية</h3>
+          <ul className="modal-plain-list">
+            <li>
+              <strong>Google Gemini (Gemini Advanced):</strong> استُخدم كمساعد ذكي في هيكلة صياغات السيناريوهات،
+              تطوير النصوص، ومراجعة أدوات التفاوض الثقافية.
+            </li>
+            <li>
+              <strong>Anthropic Claude:</strong> استُخدم كمساعد ذكي في دعم المراجعة البرمجية وتطوير محتوى سيناريوهات
+              المحاكي.
+            </li>
+          </ul>
         </section>
       </div>
     </div>
