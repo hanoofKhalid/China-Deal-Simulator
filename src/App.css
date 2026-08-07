@@ -515,6 +515,12 @@ body {
   justify-content: center;
   align-items: flex-end;
   height: 58vh;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.scene-portrait img {
+  max-width: 100%;
 }
 
 .scene-content {

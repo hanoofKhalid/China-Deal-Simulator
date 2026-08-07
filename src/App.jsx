@@ -426,7 +426,7 @@ function GameScreen({ state, onChoice }) {
             <img
               src={imageSrc}
               alt={node.speaker}
-              style={{ maxHeight: "100%", width: "auto", objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.6))" }}
+              style={{ maxHeight: "100%", maxWidth: "100%", width: "auto", objectFit: "contain", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.6))" }}
               onError={(e) => {
                 console.log("Image load failed:", e.target.src);
                 e.target.style.display = "none";
