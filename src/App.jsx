@@ -225,26 +225,26 @@ function AboutModal({ onClose }) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  حساب لينكد إن
+                  LinkedIn
                 </a>
               </div>
             </li>
             <li>
               <strong>رازان تركي السلمي</strong>
               <div className="modal-team-contact">
-                <span>البريد الإلكتروني: (يُضاف لاحقاً)</span>
+                <span>البريد الإلكتروني: rzanalslmy80@gmail.com</span>
                 <a
                   href="https://www.linkedin.com/in/razan-alselmi-0a76b52a9?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  حساب لينكد إن
+                  LinkedIn
                 </a>
               </div>
             </li>
           </ul>
           <p className="modal-team-label">إشراف:</p>
-          <p className="modal-section-text">أ. د. سبأ (يُضاف الاسم الكامل والبريد الإلكتروني لاحقاً)</p>
+          <p className="modal-section-text">أ. د. سبأ الطيب — Saeltayeb@pnu.edu.sa</p>
         </section>
 
         <section className="modal-section">
@@ -361,7 +361,7 @@ function Meter({ label, value, danger }) {
 // خريطة أسماء المتحدثين (كما تُكتب فعليًا بـ Story.js) إلى بادئة اسم ملف الصورة بـ public/assets/
 const characterImageMap = {
   "السيدة لي": "Ms.li",
-  "السيدة تشن": "Mr.chen",
+  "السيد تشن": "Mr.chen",
   "المدير وانغ": "ManagerWang",
   "نورة": "Ms.Nora",
 };
