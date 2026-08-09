@@ -244,7 +244,7 @@ function AboutModal({ onClose }) {
             </li>
           </ul>
           <p className="modal-team-label">إشراف:</p>
-          <p className="modal-section-text">أ. د. سبأ الطيب — Saeltayeb@pnu.edu.sa</p>
+          <p className="modal-section-text">د. سبأ الطيب — Saeltayeb@pnu.edu.sa</p>
         </section>
 
         <section className="modal-section">
