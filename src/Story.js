@@ -436,7 +436,7 @@ export const STORY = {
     textZh: "陈女士在提到关键的运输容量数字时说错了。",
     choices: [
       {
-        label: "تصصح الرقم علناً.",
+        label: '"المعذرة، أعتقد أنك تقصد 500,000 شحنة، وليس 50,000."',
         labelZh: "你当众纠正了这个数字。",
         effects: { guanxi: 0, mianzi: -20 },
         verdict: "fail",
