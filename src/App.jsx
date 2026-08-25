@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import {
   STORY,
   EVENT_ORDER,
@@ -688,6 +689,7 @@ export default function App() {
         </div>
       </div>
       <div className="watermark">Graduation Project 2026 | AlHanoof & Razan</div>
+      <Analytics />
     </>
   );
 }
